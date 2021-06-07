@@ -1,0 +1,52 @@
+﻿@page "/todo"
+
+<h1>Todo</h1>
+
+<input type="text" placeholder="Add To Do" @bind="newToDo" />
+<button @onclick="AddToDo">Add To Do</button>
+
+@if (!items.Any())
+{
+    <p>No items in To-Do List</p>
+    <img src="./images/loading.gif" width="250" alt="loading..."/>
+}
+else
+{
+    <ul>
+        @foreach (ToDoItem item in @items) //minder performant dan een 'for' loop
+        {
+            <li>@item.Title</li>
+        }
+
+        @*@for (int i = 0; i < items.Count; i++) //performanter dan een 'foreach'
+            {
+                <li>@items[i].Title</li>
+            }*@
+    </ul>
+}
+
+@code {
+    private List<ToDoItem> items = new();
+    private string newToDo;
+
+    public class ToDoItem
+    {
+        public string Title { get; set; }
+        public bool IsDone { get; set; }
+    }
+
+    private void AddToDo()
+    {
+        if (!string.IsNullOrEmpty(newToDo))
+        {
+            items.Add(new ToDoItem
+            {
+                IsDone = false,
+                Title = newToDo
+            });
+        }
+
+        newToDo = string.Empty;
+
+    }
+}
